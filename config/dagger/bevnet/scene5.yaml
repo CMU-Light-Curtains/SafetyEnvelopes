@@ -1,0 +1,30 @@
+# BevNet, Scene 5
+splits:
+  train: scene5
+  valid: scene5
+  test : null
+
+actor: BevNet
+epochs: 120
+horizon: 30  # 50
+self_supervised: False
+
+reinitialize_network: False
+hard_example_mining: False
+buffer_size: 25000  # ~ epochs * samples_per_epoch
+batch_size: 200
+valid_ratio: 0.25
+
+# behavior cloning
+samples_for_bc: 200
+batches_for_bc: 300
+
+# aggregation epoch
+samples_per_epoch: 100
+batches_per_epoch: 300
+
+# training parameters
+learning_rate: 3.0e-5
+metric: Huber
+optimizer: adam
+eval_every: 1  # 10

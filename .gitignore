@@ -1,0 +1,57 @@
+__pycache__
+outputs
+.tmp*
+*.pkl
+settings.json
+data/real_world
+
+results
+
+######################### Binary Files #########################
+.idea
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.cuo
+
+# Compiled Dynamic libraries
+*.so*
+*.dylib
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+# Compiled protocol buffers
+*.pb.h
+*.pb.cc
+*_pb2.py
+
+# Compiled python
+*.pyc
+
+######################### IDEs Files #########################
+# Editor temporaries
+*.swp
+*~
+
+# JetBrains files
+.idea
+
+# OSX dir files
+.DS_Store
+._.DS_Store
+
+######################### Compilation (build, distribute & bins) Files / Folders #########################
+*.bin
+*.testbin
+build
+build*
+.build*
+*cmake_build
+*cmake-build-debug
+*cmake-build-release
+distribute/*

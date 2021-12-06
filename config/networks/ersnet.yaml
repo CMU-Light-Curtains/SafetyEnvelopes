@@ -1,0 +1,6 @@
+history: 5
+num_bins: 128
+learn_e: false
+learn_r: true
+learn_sigma: false
+init_sigma: 1.0e-3

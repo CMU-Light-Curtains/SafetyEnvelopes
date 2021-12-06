@@ -1,0 +1,6 @@
+analysis/plots/prob_vs_area.png filter=lfs diff=lfs merge=lfs -text
+analysis/plots/prob_vs_curtains.png filter=lfs diff=lfs merge=lfs -text
+analysis/plots/monte_carlo.png filter=lfs diff=lfs merge=lfs -text
+kittiviewer/frontend/figs/data/frame1 filter=lfs diff=lfs merge=lfs -text
+kittiviewer/frontend/figs/data/frame1/scene_cloud.txt filter=lfs diff=lfs merge=lfs -text
+kittiviewer/frontend/figs/data/frame2 filter=lfs diff=lfs merge=lfs -text

@@ -1,0 +1,36 @@
+# ERSNet, Entire dataset
+splits:
+  train: train
+  valid: mini_train
+  test : mini_test
+
+horizon: 50
+gamma: 0.8
+alpha: 0.05
+
+# training time
+buffer_size: 2100
+target_kl: 0.012  # can be null
+epochs: 500
+
+# actor parameters
+actor:
+  name: ERSNet
+  batch_size: 2100  # can be null
+  learning_rate: 3.0e-4
+  passes_per_epoch: 100
+
+# critic parameters
+critic:
+  name: Res1DCritic
+  batch_size: null  # can be null
+  learning_rate: 1.0e-3
+  passes_per_epoch: 50
+
+# ppo parameters
+clip_range: 0.2
+max_grad_norm: 100  # stable-baselines3 default=0.5
+
+metric: Huber
+optimizer: adam
+eval_every: 5

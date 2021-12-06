@@ -1,0 +1,23 @@
+# BevNet, Entire dataset
+
+collect_data: True
+train_network: False
+base_dir_path: /home/ilim/repos/LC-SET/data/real_world
+data_collection_episodes: 4 # number of episodes for data-collection
+run_id: 199
+
+actor: BevNet
+horizon: 200 # 50 for jeep # total dataset size would be (horizon * data_collection_episodes)
+self_supervised: False # this should always be False
+
+##### Training hyper-parameters ######
+epochs: 10
+reinitialize_network: False # this should always be False
+hard_example_mining: False # this should always be False
+batch_size: 100 # batch size of the data
+valid_ratio: 0.25
+database_dir: ['/home/ilim/repos/LC-SET/data/real_world/June 08, 2021', '/home/ilim/repos/LC-SET/data/real_world/June 14, 2021']
+
+# training parameters
+learning_rate: 3.0e-5
+optimizer: adam

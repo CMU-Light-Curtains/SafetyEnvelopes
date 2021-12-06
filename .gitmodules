@@ -1,0 +1,9 @@
+[submodule "ConstraintGraph"]
+	path = ConstraintGraph
+	url = https://github.com/CMU-Light-Curtains/ConstraintGraph.git
+[submodule "Simulator"]
+	path = Simulator
+	url = https://github.com/CMU-Light-Curtains/Simulator.git
+[submodule "cpp/lib/pybind11"]
+	path = cpp/lib/pybind11
+	url = https://github.com/pybind/pybind11.git

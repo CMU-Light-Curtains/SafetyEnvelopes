@@ -1,0 +1,36 @@
+# BevNet, Scene 5
+splits:
+  train: scene5
+  valid: scene5
+  test : null
+
+horizon: 30  # 50
+gamma: 0.8
+alpha: 0.05
+
+# training time
+buffer_size: 1500
+target_kl: 0.012  # can be null
+epochs: 100
+
+# actor parameters
+actor:
+  name: BevNet
+  batch_size: 300  # can be null
+  learning_rate: 1.0e-3
+  passes_per_epoch: 100
+
+# critic parameters
+critic:
+  name: Res1DCritic
+  batch_size: null  # can be null
+  learning_rate: 1.0e-3
+  passes_per_epoch: 50
+
+# ppo parameters
+clip_range: 0.2
+max_grad_norm: 100  # stable-baselines3 default=0.5
+
+metric: Huber
+optimizer: adam
+eval_every: 1  # 5

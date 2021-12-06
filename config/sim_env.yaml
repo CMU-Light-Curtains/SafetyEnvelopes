@@ -1,0 +1,16 @@
+interval: 2  #  latency is 80ms
+use_random_curtain: True
+random_curtain_updates_main_curtain: True
+random_curtain_sampling: linear  # options are {uniform, linear}
+random_curtain_spacing_power: 1
+vertical_range: [-1.0, .inf]
+r_hit_intensity_thresh: 100  # intensity threshold for random curtain
+r_recession: 0.0  # recession for random curtain
+pp_smoothing: heuristic_greedy  # options are {heuristic_global, heuristic_greedy, planner_global}
+tracking_rtol: 0.0
+tracking_atol: 100.0  # disable episode termination
+baseline:
+  expansion: 0.3
+  recession: 0.4
+  smoothness: 0.05
+  f_hit_intensity_thresh: 200  # intensity threshold for forecasting curtain

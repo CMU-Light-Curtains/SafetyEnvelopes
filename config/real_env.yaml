@@ -1,0 +1,19 @@
+use_random_curtain: True
+random_curtain_updates_main_curtain: True
+random_curtain_sampling: linear  # options are {uniform, linear}
+random_curtain_spacing_power: 1
+vertical_range: [-0.75, 1]  # [-0.85, 0.5] for lab, [-0.75, 1] beside jeep
+r_hit_intensity_thresh: 100  # 40 for lab, 100 beside jeep, 100 on jeep
+r_recession: 0.0  # recession for random curtain
+r_cache_file: "cache/rand_curtains/real_env_beside_jeep.txt"
+pp_smoothing: heuristic_greedy  # options are {heuristic_global, heuristic_greedy, planner_global}
+min_range: 1.0 # 0.5 for lab, 1.0 beside jeep, 0.50 on jeep
+max_range: 7.0 # 4.0 for lab, 7.0 beside jeep, 10.0 on jeep
+tracking_rtol: 0.0
+tracking_atol: 100.0  # disable episode termination
+gt_min_filter_size: 3  # kernel size for min-filtering ground truth
+baseline:
+  expansion: 0.3
+  recession: 0.4
+  smoothness: 0.05
+  f_hit_intensity_thresh: 40  # intensity threshold for forecasting curtain

@@ -1,0 +1,15 @@
+# Config for Synthia dataset
+CAMERA_PARAMS:
+  width: 640
+  height: 480
+  fov: 39.32012056540195
+  matrix: [[895.6921997070312 ,    0.0             , 320.0],  # this corresponds to an fov of 39.32012056540196 degrees
+           [  0.0             ,  895.6921997070312 , 240.0],
+           [  0.0             ,    0.0             ,   1.0]]
+  distortion: [0, 0, 0, 0, 0]
+
+LASER_PARAMS:
+  y: -0.2  # place laser 3m to the right of camera
+  max_omega: 25000  # degrees per sec
+  # max_alpha: 5.0e+7  # degrees per sec^2
+  max_alpha: 1.5e+7  # degrees per sec^2

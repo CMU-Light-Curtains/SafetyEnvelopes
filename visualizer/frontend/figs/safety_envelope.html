@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous" />
+    <link rel="stylesheet" type="text/css" href="css/main.css" media="screen" />
+    <title>SECOND Kitti Viewer</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT"
+        crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="js/libs/jquery-3.3.1.min.js">\x3C/script>');</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.3.0/math.js" integrity="sha384-YILGCrKtrx9ucVIp2iNy85HZcWysS6pXa+tAW+Jbgxoi3TJJSCrg0fJG5C0AJzJO"
+        crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/jspanel4@4.3.0/dist/jspanel.css" rel="stylesheet" />
+    <!-- jsPanel JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/jspanel4@4.3.0/dist/jspanel.js" integrity="sha384-2F3fGv9PeamJMmqDMSollVdfQqFsLLru6E0ed+AOHOq3tB2IyUDSyllqrQJqx2vp"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <script>window.Cookies || document.write('<script src="js/libs/js.cookie.min.js">\x3C/script>');</script>
+
+    <script src="js/dat.gui.js"></script>
+
+    <!-- three.js imports -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.129.0/build/three.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/three@0.129.0/examples/js/renderers/CSS2DRenderer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.129.0/examples/js/controls/OrbitControls.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/three@0.129.0/examples/js/postprocessing/EffectComposer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.129.0/examples/js/postprocessing/RenderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.129.0/examples/js/shaders/CopyShader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.129.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.129.0/examples/js/postprocessing/ShaderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.129.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+    
+    <!-- <script src="js/shaders/ConvolutionShader.js"></script> -->
+    <!-- <script src="js/shaders/FilmShader.js"></script> -->
+    <!-- <script src="js/shaders/FocusShader.js"></script> -->
+    <!-- <script src="js/postprocessing/MaskPass.js"></script> -->
+    <!-- <script src="js/postprocessing/BloomPass.js"></script> -->
+    <!-- <script src="js/postprocessing/FilmPass.js"></script> -->
+    <!-- <script src="js/shaders/LuminosityHighPassShader.js"></script> -->
+
+    <script src="js/Components.js"></script>
+    <script src="js/Toast.js"></script>
+</head>
+
+<body>
+    <ul class="toasts"></ul>
+    <script type="text/javascript">
+        const int16Factor = 100;
+        const toasts = $(".toasts")[0];
+        const logger = new Toast(toasts);
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x000000, 0.01);
+
+        THREE.Cache.enabled = true;  // in order to use THREE.FileLoader()
+        const loader = new THREE.FileLoader();
+
+        // Camera
+        const camera = new THREE.PerspectiveCamera(
+            75,
+            window.innerWidth / window.innerHeight,
+            0.1,
+            300
+        );
+        camera.position.set(0, -4, 13);  // sim: (0, -5, -10), real: (0, -2, -4)
+        camera.lookAt(new THREE.Vector3(0, 0, 20));
+        camera.up.set(0, -1, 0);
+
+        // Camera Helper
+        // var camhelper = new THREE.CameraHelper(camera);
+        // scene.add(camhelper);
+
+        // Renderer
+        const renderer = new THREE.WebGLRenderer({
+            antialias: true,
+            preserveDrawingBuffer: true
+        });
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor("rgb(0, 0, 0)", 1);  // background color is black
+
+        // Axes Helper
+        // const axesHelper = new THREE.AxesHelper(0.3);
+        // scene.add(axesHelper);
+
+        // Grid Helper
+        // const gridHelper = new THREE.GridHelper(16, 16);
+        // gridHelper.translateY(0.85);
+        // scene.add(gridHelper);
+
+        // Stats
+        // const stats = new Stats();
+        // stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+        // document.body.appendChild( stats.dom );
+
+        // Scene cloud
+        const sceneCloud = new ColoredSceneCloud(500000, size=4, texture="textures/sprites/disc.png");
+        scene.add(sceneCloud);
+
+        // Safety envelope
+        const safetyEnvelope = new Curtain(
+            MAX_CAM_WIDTH=640,
+            MAX_ISECT_PTS=0,
+            POINT_SIZE=2.0,
+            ISECT_THRESH=0.4,
+            HEIGHT_RANGE=[-1.255, 2.2],
+            COLOR_MESH="rgb(0, 40, 0)",
+            COLOR_LINE="rgb(0, 255, 0)",
+            LINE_WIDTH=4,
+            OPACITY=0.5
+        );
+        scene.add(safetyEnvelope);
+
+        // Loading scene cloud and safety envelope
+        loader.load("data/frame1/scene_cloud.txt", function(data) {
+            data = JSON.parse(data);
+            
+            // update scene cloud
+            const pointsBuf = str2buffer(atob(data["scene_pc_str"]));
+            const points = new Int16Array(pointsBuf);
+            sceneCloud.update(points, int16Factor);
+
+            // update safety envelope
+            const seProfileBuf = str2buffer(atob(data["se_pc_str"]));
+            const intArray = new Int16Array(seProfileBuf);
+            const seProfile = new Float32Array(intArray.length);
+            for (let i = 0; i < intArray.length; i++)
+                seProfile[i] = intArray[i] / int16Factor;
+            const isectPoints = new Float32Array(0);  // no isect points for safety envelope
+            safetyEnvelope.update(seProfile, isectPoints);
+        });
+
+        // CSS2DRenderer
+        const labelRenderer = new THREE.CSS2DRenderer();
+        labelRenderer.setSize(window.innerWidth, window.innerHeight);
+        labelRenderer.domElement.style.position = "absolute";
+        labelRenderer.domElement.style.top = 0;
+        document.body.appendChild(labelRenderer.domElement);
+        document.body.appendChild(renderer.domElement);
+
+        // event listener to print mouse coordinates to console on mouse up
+        // function onDocumentMouseUp(event) {
+        //     event.preventDefault();
+        //     console.log(camera.position);
+        // }
+        // document.addEventListener('mouseup', onDocumentMouseUp, false);
+        
+        // Window resize event listener
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            // camhelper.update();
+        }
+        window.addEventListener("resize", onWindowResize, false);
+
+        // Orbit Controls
+        const controls = new THREE.OrbitControls(camera, labelRenderer.domElement);
+        controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
+        controls.dampingFactor = 0.25;
+        controls.screenSpacePanning = false;
+        controls.panSpeed = 2;
+        controls.rotateSpeed = 2;
+        controls.minDistance = 1;
+        controls.maxDistance = 30;
+        controls.maxPolarAngle = Math.PI / 2;
+        controls.target = new THREE.Vector3(0, 0, 20);
+        controls.mouseButtons = { LEFT: THREE.MOUSE.PAN, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.ROTATE }
+        controls.update();
+
+        // =============================================================================================================
+        // #region Post-processing to add effects
+        // =============================================================================================================
+        
+        let effectParams = {
+            exposure: 1.05,
+            bloomStrength: 0.6,  // sim: 0.7, real: 0.3
+            bloomThreshold: 0,
+            bloomRadius: 0
+        };
+
+        // pass for usual rendering
+        const renderPass = new THREE.RenderPass(scene, camera);
+        
+        // pass for adding noise to image
+        // var filmPass = new THREE.FilmPass(0.5, 0.5, 1448, false);
+        
+        // pass for depth-of-field effect
+        // focusPass = new THREE.ShaderPass(THREE.FocusShader);
+        // focusPass.uniforms["screenWidth"].value = window.innerWidth;
+        // focusPass.uniforms["screenHeight"].value = window.innerHeight;
+        // focusPass.renderToScreen = true;
+
+        // pass for adding bloom
+        // var bloomPass = new THREE.BloomPass(0.75);
+        const bloomPass = new THREE.UnrealBloomPass(
+            new THREE.Vector2(window.innerWidth, window.innerHeight),
+            1.5,
+            0.4,
+            0.85
+        );
+        bloomPass.renderToScreen = true;  // must be true for the last pass that is added to EffectComposer
+        bloomPass.threshold = effectParams.bloomThreshold;
+        bloomPass.strength = effectParams.bloomStrength;
+        bloomPass.radius = effectParams.bloomRadius;
+        
+        // Effect Composer
+        const effectComposer = new THREE.EffectComposer(renderer);
+        effectComposer.addPass(renderPass);
+        // composer.addPass(filmPass);
+        // composer.addPass(focusPass);
+        effectComposer.addPass(bloomPass);
+
+        // #endregion
+        // =============================================================================================================
+        // #region Controller GUI
+        // =============================================================================================================
+
+        const gui = new dat.GUI();
+        const postGui = gui.addFolder("effect");
+        postGui.add(effectParams, "exposure", 0.1, 2).onChange(function (value) {
+            renderer.toneMappingExposure = Math.pow(value, 4.0);
+        });
+        postGui
+            .add(effectParams, "bloomThreshold", 0.0, 1.0)
+            .onChange(function (value) {
+                bloomPass.threshold = Number(value);
+            });
+        postGui
+            .add(effectParams, "bloomStrength", 0.0, 3.0)
+            .onChange(function (value) {
+                bloomPass.strength = Number(value);
+            });
+        postGui
+            .add(effectParams, "bloomRadius", 0.0, 1.0)
+            .step(0.01)
+            .onChange(function (value) {
+                bloomPass.radius = Number(value);
+            });
+        // postGui.open();
+        const param = {
+            color: sceneCloud.material.color.getHex()
+        };
+        const pointGui = gui.addFolder("points");
+        pointGui.add(sceneCloud.material, "size", 1, 10);
+        pointGui.addColor(param, "color").onChange(function (val) {
+            sceneCloud.material.color.setHex(val);
+        });
+        pointGui.close();
+        const lcGui = gui.addFolder("light curtain");
+        lcGui.add(safetyEnvelope.curtainMesh.material, "opacity", 0, 1).name("Opacity");
+        lcGui.add(safetyEnvelope.isectPoints, "isectThresh", 0, 1).name("IThresh");
+        lcGui.add(safetyEnvelope, "visible", true).name("Safety Envelope")
+        lcGui.open();
+
+        // #endregion
+        // =============================================================================================================
+        // #region Animation Loop
+        // =============================================================================================================
+
+        const animate = function () {
+            requestAnimationFrame(animate);
+            labelRenderer.render(scene, camera);
+            effectComposer.render(0.01);
+        };
+        animate();
+
+        // #endregion
+        // =============================================================================================================
+
+    </script>
+</body>
+
+</html>

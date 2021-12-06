@@ -1,0 +1,3 @@
+history: 5
+num_bins: 128
+stochastic: True

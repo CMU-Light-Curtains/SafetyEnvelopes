@@ -1,0 +1,22 @@
+# Config for the real device
+CAMERA_PARAMS:
+  width: 512
+  height: 640
+
+  # intrinsics matrix at full resolution
+  # matrix: [[893.074542 ,   0.       , 524.145998],  # this corresponds to an fov of 60.817398393659886 degrees
+  #          [  0.       , 893.177518 , 646.766885],
+  #          [  0.       ,   0.       ,   1.      ]]
+
+  # intrinsics matrix at half resolution: number of rows and columns are halved
+  matrix: [[446.537271 ,   0.       , 262.072999 ],  # this corresponds to an fov of 60.817398393659886 degrees
+           [  0.       , 446.588759 , 323.3834425],
+           [  0.       ,   0.       ,   1.       ]]
+
+  distortion: [-0.033918, 0.027494, -0.001691, -0.001078, 0.000000]
+
+LASER_PARAMS:
+  y: -0.2  # place laser 20cm to the right of camera
+  max_omega: 25000  # degrees per sec
+  # max_alpha: 5.0e+7  # degrees per sec^2
+  max_alpha: 3.0e+7  # degrees per sec^2, when on jeep: 1.5e+7

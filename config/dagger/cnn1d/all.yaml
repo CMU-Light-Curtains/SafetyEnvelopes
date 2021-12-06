@@ -1,0 +1,30 @@
+# CNN1D, Entire dataset
+splits:
+  train: train
+  valid: mini_train
+  test : mini_test
+
+actor: CNN1D
+epochs: 1000
+horizon: 50
+self_supervised: False
+
+reinitialize_network: False
+hard_example_mining: False
+buffer_size: 100000  # ideally ~ epochs * samples_per_epoch
+batch_size: 500
+valid_ratio: 0.25
+
+# behavior cloning
+samples_for_bc: 500
+batches_for_bc: 300
+
+# aggregation epoch
+samples_per_epoch: 200
+batches_per_epoch: 300
+
+# training parameters
+learning_rate: 3.0e-5
+metric: Huber
+optimizer: adam
+eval_every: 10
